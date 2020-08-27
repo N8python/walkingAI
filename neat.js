@@ -190,11 +190,25 @@ function NN({
 
         },
         weightDiff(otherNet) {
-            const mine = connectionGenes.filter(({ innov }) => otherNet.connectionGenes.some(({ innov: i }) => innov === i)).map(({ weight, innov }) => Math.abs(weight - otherNet.connectionGenes.find(({ innov: i }) => innov === i).weight)).reduce((t, v) => t + v, 0);
+            //const mine = connectionGenes.filter(({ innov }) => otherNet.connectionGenes.some(({ innov: i }) => innov === i)).map(({ weight, innov }) => Math.abs(weight - otherNet.connectionGenes.find(({ innov: i }) => innov === i).weight)).reduce((t, v) => t + v, 0);
 
-            const theirs = otherNet.connectionGenes.filter(({ innov }) => connectionGenes.some(({ innov: i }) => innov === i)).map(({ weight, innov }) => Math.abs(weight - connectionGenes.find(({ innov: i }) => innov === i).weight)).reduce((t, v) => t + v, 0);
+            //const theirs = otherNet.connectionGenes.filter(({ innov }) => connectionGenes.some(({ innov: i }) => innov === i)).map(({ weight, innov }) => Math.abs(weight - connectionGenes.find(({ innov: i }) => innov === i).weight)).reduce((t, v) => t + v, 0);
 
-            return (mine + theirs) / Math.max((connectionGenes.length + otherNet.connectionGenes.length), 1)
+            //return (mine + theirs) / Math.max((connectionGenes.length + otherNet.connectionGenes.length), 1)
+            let diff = 0;
+            let matching = 0;
+            connectionGenes.forEach(gene => {
+                otherNet.connectionGenes.forEach(gene2 => {
+                    if (gene.innov === gene2.innov) {
+                        matching++;
+                        diff += Math.abs(gene.weight - gene2.weight);
+                    }
+                })
+            });
+            if (matching === 0) {
+                return 100;
+            }
+            return diff / matching;
         },
         clone() {
             return NN({

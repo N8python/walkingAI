@@ -3,11 +3,7 @@ function Person({
     y,
     b
 }) {
-    const brain = b ? b : NN({
-        inputs: 11,
-        hiddenLayers: [],
-        outputs: 8
-    });
+    const brain = b;
     const myGroup = Body.nextGroup(false);
     const torso = Bodies.rectangle(x, y, 10, 40, {
         collisionFilter: {
@@ -16,7 +12,8 @@ function Person({
             category: uniqCategory
         },
         restitution: 0.5,
-        friction: 1
+        friction: 1,
+        frictionAir: 0
     });
     const head = Bodies.circle(x, y - 25, 15, {
         collisionFilter: {
@@ -25,6 +22,7 @@ function Person({
             category: uniqCategory
         },
         friction: 1,
+        frictionAir: 0,
         restitution: 0.5,
         density: 0.00000000001
     });
@@ -81,6 +79,7 @@ function Person({
             category: uniqCategory
         },
         friction: 1,
+        frictionAir: 0,
         restitution: 0.5,
         density: 0.005
             /*frictionAir: 0.1,*/
@@ -92,6 +91,7 @@ function Person({
             category: uniqCategory
         },
         friction: 1,
+        frictionAir: 0,
         restitution: 0.5,
         density: 0.005
             /*frictionAir: 0.1,*/
@@ -149,7 +149,8 @@ function Person({
         restitution: 0.5,
         density: 0.005,
         damping: 0.1,
-        friction: 1
+        friction: 1,
+        frictionAir: 0
             /*angleAStiffness: s,
             angleAMin: -Math.PI / l,
             angleAMax: Math.PI / l,*/
@@ -162,6 +163,7 @@ function Person({
         },
         restitution: 0.5,
         density: 0.005,
+        frictionAir: 0,
         damping: 0.1,
         friction: 1
             /*angleAStiffness: s,

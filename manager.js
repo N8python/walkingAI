@@ -117,7 +117,7 @@ const Manager = {
                 }
             }
         })
-        this.deathX += 0.5;
+        this.deathX += 0.5; //min(0.5 + 0.0025 * this.generation, 1);
         stroke(255, 0, 0);
         strokeWeight(5);
         line(this.deathX, 0, this.deathX, 800);
