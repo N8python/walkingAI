@@ -345,7 +345,7 @@ function Person({
                 movingLegs += sigmoid(upperLeg2.angularSpeed) * legImportance;
                 movingLegs += sigmoid(lowerLeg1.angularSpeed) * legImportance;
                 movingLegs += sigmoid(lowerLeg2.angularSpeed) * legImportance;
-                //fill(225);
+                fill(225);
                 drawVertices(torso.vertices);
                 /*drawVertices(arm1.vertices);
                 drawVertices(arm2.vertices);*/
@@ -356,6 +356,20 @@ function Person({
                 /*drawVertices(foot1.vertices);
                 drawVertices(foot2.vertices);*/
                 drawCircle(head);
+                push();
+                noFill();
+                const headX = head.position.x;
+                const headY = head.position.y;
+                const xOffset = constrain(head.velocity.x, -2, 2);
+                const yOffset = constrain(head.velocity.y, -2, 2);
+                translate(headX, headY);
+                rotate(head.angle * (180 / Math.PI) * 0.1);
+                circle(-7, -2, 10);
+                circle(7, -2, 10);
+                fill(0);
+                circle(-7 + xOffset, -2 + yOffset, 5);
+                circle(7 + xOffset, -2 + yOffset, 5);
+                pop();
                 /*stroke(255, 0, 0);
                 drawConstraint(neck);
                 drawConstraint(hipJoint1);
@@ -471,6 +485,12 @@ function Person({
         },
         think() {
             this.adjustAngles(brain.feedForward(this.prepareInputs()));
+        },
+        get x() {
+            return torso.position.x;
+        },
+        get y() {
+            return torso.position.y;
         }
     }
 }

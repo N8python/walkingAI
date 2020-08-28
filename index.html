@@ -5,14 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Walkies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src="matter.js"></script>
 </head>
 
 <body>
-    <div style="float:right">
+    <div class="w3-border w3-padding" style="float:right">
         <p id="genDisplay"></p>
-        <p id="timeLeft"></p>
+        <button class="w3-btn w3-border w3-round-xlarge styled-btn" id="openCharts">See Evolution History</button>
+    </div>
+    <div id="charts" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container">
+                <span onclick="document.getElementById('charts').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <h1>Evolution/Fitness of Walkies over time:</h1>
+                <canvas id="history" width="400" height="200"></canvas>
+            </div>
+        </div>
     </div>
     <script src="winningWeights.js"></script>
     <!--<script src="nn.js"></script>-->

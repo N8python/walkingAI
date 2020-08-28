@@ -1,0 +1,14 @@
+.styled-btn {
+    background-color: white;
+    transition: 250ms;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.styled-btn:hover {
+    background-color: lightgrey;
+}
+
+h1 {
+    font-family: 'Crimson Text', serif;
+}

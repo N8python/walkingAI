@@ -1,13 +1,17 @@
 const gsize = 128;
+let deathLines = [];
 const Manager = {
     generation: 1,
     batch: 1,
     highScore: 0,
+    highMeters: 0,
     generationSize: gsize,
     batchSize: 32,
     batchTimer: Infinity,
     deathX: 0,
     walkies: [],
+    medianHistory: [],
+    bestHistory: [],
     pop: Population({
         popSize: gsize,
         inputs: 13,
@@ -28,6 +32,17 @@ const Manager = {
     },
     initGeneration(prev) {
         if (this.generation !== 1) {
+            this.medianHistory.push(this.medianScore());
+            this.bestHistory.push(this.highMeters);
+            history.data.labels.push(this.generation);
+            history.data.datasets.forEach(dataset => {
+                if (dataset.label === "Median Score") {
+                    dataset.data.push(this.medianScore())
+                } else if (dataset.label === "High Score") {
+                    dataset.data.push(this.highMeters);
+                }
+            })
+            history.update();
             for (let i = 0; i < this.generationSize; i++) {
                 this.walkies[i].brain.fitness = this.walkies[i].score;
             }
@@ -120,18 +135,50 @@ const Manager = {
         this.deathX += 0.5; //min(0.5 + 0.0025 * this.generation, 1);
         stroke(255, 0, 0);
         strokeWeight(5);
-        line(this.deathX, 0, this.deathX, 800);
+        line(this.deathX, 0, this.deathX, 502);
         strokeWeight(1);
+        stroke(255);
+        line(this.deathX, 0, this.deathX, 502);
+        deathLines = []
+        for (let i = 0; i < 3; i++) {
+            deathLines.push([this.deathX, 505, this.deathX + map(noise((this.deathX * (i + 3)) ** 2), 0, 1, -20, 20), map(noise((this.deathX * (i + 1)) ** 2), 0, 1, 485, 505)])
+        }
+        deathLines.forEach(death => {
+            stroke(255, 0, 0);
+            strokeWeight(floor(random(2, 5)))
+            line(...death);
+            stroke(255);
+            strokeWeight(1)
+            line(...death);
+        });
+        strokeWeight(1);
+        stroke(255, 0, 0);
+        line(0, 500, this.deathX, 500);
+        line(0, 505, this.deathX, 505);
         stroke(0);
     },
     checkHighScore() {
         if (this.currentTopScore > this.highScore) {
             this.highScore = Math.round(this.currentTopScore);
         }
+        if (this.currentMeters > this.highMeters) {
+            this.highMeters = this.currentMeters;
+        }
+    },
+    medianScore() {
+        const sorted = [...this.walkies].sort((a, b) => a.x - b.x);
+        if (gsize % 2 === 0) {
+            return ((sorted[Math.ceil(gsize / 2)].x - 100) / 200 + (sorted[Math.floor(gsize / 2)].x - 100) / 200) / 2;
+        }
+        return (sorted[Math.ceil(gsize / 2)].x - 100) / 200;
     },
     get currentTopScore() {
         const i = [...this.walkies].filter(walkie => walkie.inGame).sort((a, b) => b.score - a.score)[0];
         return i ? i.score : 0;
+    },
+    get currentMeters() {
+        const i = [...this.walkies].filter(walkie => walkie.inGame).sort((a, b) => b.x - a.x)[0];
+        return i ? ((i.x - 100) / 200) : 0;
     },
     get leader() {
         const i = [...this.walkies].filter(walkie => walkie.inGame).sort((a, b) => b.score - a.score)[0];
