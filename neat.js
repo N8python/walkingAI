@@ -66,7 +66,7 @@ function NN({
         addConnection() {
             let connectionFound = false;
             [...nodeGenes].sort(() => Math.random() - 0.5).forEach(node1 => {
-                nodeGenes.sort(() => Math.random() - 0.5).forEach(node2 => {
+                [...nodeGenes].sort(() => Math.random() - 0.5).forEach(node2 => {
                     if ((node1.type === "input" && node2.type === "hidden") || (node1.type === "input" && node2.type === "output") || (node1.type === "hidden" && node2.type === "hidden") || (node1.type === "hidden" && node2.type === "output")) {
                         if (!connectionFound && (node1 !== node2)) {
                             const isConnection = connectionGenes.some(gene => {
